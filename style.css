@@ -1,1 +1,301 @@
+/* ==========================================
+   1. CONFIGURAÇÕES GERAIS E RESETS
+   ========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-family: 'Press Start 2P', monospace; /* Fonte estilo Pixel Art */
+}
 
+body {
+    background-color: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Container Principal do Jogo */
+#game-container {
+    width: 800px;
+    height: 500px;
+    position: relative;
+    background-color: #000;
+    border: 4px solid #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+}
+
+/* ==========================================
+   2. TELA DE START (AZUL CLARO PIXEL)
+   ========================================== */
+#start-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #87CEEB; /* Azul Claro */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    border: 8px solid #4682B4;
+}
+
+#start-screen h1 {
+    color: #1E3F66;
+    font-size: 24px;
+    margin-bottom: 40px;
+    text-align: center;
+    text-shadow: 3px 3px 0px #FFF;
+    line-height: 1.5;
+}
+
+.btn-play {
+    background-color: #005f73;
+    color: #FFF;
+    border: 4px solid #FFF;
+    padding: 15px 40px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000;
+    transition: transform 0.1s;
+}
+
+.btn-play:hover {
+    background-color: #0a9396;
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   3. CENÁRIOS (PADARIA E COZINHA)
+   ========================================== */
+.scene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+/* Cenário 1: Padaria */
+#bakery-scene {
+    background-color: #f4a261;
+    /* Padrão Xadrez do Chão */
+    background-image: 
+        linear-gradient(45deg, #e76f51 25%, transparent 25%), 
+        linear-gradient(-45deg, #e76f51 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #e76f51 75%),
+        linear-gradient(-45deg, transparent 75%, #e76f51 75%);
+    background-size: 40px 40px;
+    background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+}
+
+.counter {
+    position: absolute;
+    bottom: 0;
+    left: 200px;
+    width: 400px;
+    height: 80px;
+    background-color: #8d5b4c;
+    border: 4px solid #3d2314;
+}
+
+.exit-door {
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+    width: 80px;
+    height: 140px;
+    background-color: #e63946;
+    border: 4px solid #900c3f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Cenário 2: Cozinha */
+#kitchen-scene {
+    background-color: #2a9d8f;
+    background-image: radial-gradient(#264653 20%, transparent 20%);
+    background-size: 30px 30px;
+}
+
+.kitchen-table {
+    position: absolute;
+    bottom: 40px;
+    left: 250px;
+    width: 300px;
+    height: 120px;
+    background-color: #e9c46a;
+    border: 4px solid #f4a261;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bowl {
+    width: 80px;
+    height: 50px;
+    background-color: #ffffff;
+    border: 4px solid #d8d8d8;
+    border-radius: 0 0 40px 40px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    transition: transform 0.15s ease;
+}
+
+/* ==========================================
+   4. AVATARES (PIXEL ART)
+   ========================================== */
+.avatar {
+    width: 50px;
+    height: 70px;
+    position: absolute;
+    transition: all 0.3s ease;
+}
+
+/* Avatar do Coisinho (Moletom Verde Musgo, Cabelo Castanho Cacheado + Mecha Branca) */
+.coisinho {
+    background-color: #2d6a4f;
+    border-radius: 8px;
+    border: 3px solid #1b4332;
+}
+.coisinho::before {
+    content: '';
+    position: absolute;
+    top: -18px;
+    left: 2px;
+    width: 40px;
+    height: 22px;
+    background-color: #582f0e; /* Cabelo Castanho */
+    border-radius: 10px 10px 0 0;
+    box-shadow: inset 10px 0 0 #e9ecef; /* Mecha Branca */
+}
+.coisinho::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 10px;
+    width: 24px;
+    height: 12px;
+    background-color: #ffcdb2; /* Rosto */
+    border-radius: 3px;
+}
+
+/* Seu Avatar (Cabelo Cacheado Vermelho, Pele Morena Clara) */
+.my-avatar {
+    background-color: #e63946;
+    border-radius: 8px;
+    border: 3px solid #900c3f;
+}
+.my-avatar::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -4px;
+    width: 52px;
+    height: 25px;
+    background-color: #d62828; /* Cabelo Vermelho */
+    border-radius: 15px 15px 0 0;
+}
+.my-avatar::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 10px;
+    width: 24px;
+    height: 12px;
+    background-color: #e0a96d; /* Pele Morena Clara */
+    border-radius: 3px;
+}
+
+/* ==========================================
+   5. ITENS, CONQUISTAS E BOLO
+   ========================================== */
+.item {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    background-color: #FFF;
+    border: 2px solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    animation: bounce 0.6s infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+}
+
+/* Caixas de Texto e Diálogos */
+#msg-box {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #FFF;
+    border: 3px solid #FFF;
+    padding: 12px;
+    font-size: 11px;
+    line-height: 1.6;
+    text-align: center;
+    z-index: 50;
+}
+
+/* Pop-up Amarelo de Conquistas */
+.achievement {
+    position: absolute;
+    bottom: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f1c40f;
+    color: #000;
+    border: 4px solid #000;
+    padding: 12px 20px;
+    font-size: 10px;
+    text-align: center;
+    z-index: 60;
+    transition: bottom 0.5s ease-in-out;
+    box-shadow: 0 4px 0 #b7950b;
+    max-width: 80%;
+}
+
+.achievement.show {
+    bottom: 20px;
+}
+
+/* Bolo Final */
+#cake {
+    width: 60px;
+    height: 45px;
+    background-color: #fff; /* Leite Ninho */
+    border: 3px solid #d4a373;
+    border-radius: 8px 8px 0 0;
+    position: absolute;
+    top: -50px;
+    display: none;
+}
+#cake::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 15px;
+    background-color: #fcbf49; /* Calda de Maracujá */
+    border-radius: 5px 5px 0 0;
+}
