@@ -281,4 +281,328 @@ h1 {
 @keyframes fall {
   0% { top: -10px; transform: rotate(0deg); }
   100% { top: 600px; transform: rotate(360deg); }
+   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      font-family: 'Press Start 2P', monospace;
+    }
+
+    body {
+      background-color: #1a0933;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* Container Principal do Jogo */
+    #game-container {
+      width: 800px;
+      height: 600px;
+      position: relative;
+      border: 4px solid #8a2be2;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #8a2be2, 0 0 40px #00ffcc;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    /* Tela de Início / Menu (Roxo, Verde e Azul Pixel) */
+    .screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .active {
+      display: flex;
+    }
+
+    #start-screen {
+      background: linear-gradient(135deg, #2b0054 0%, #0d3b36 100%);
+    }
+
+    h1 {
+      font-size: 24pt;
+      color: #00f0ff;
+      text-shadow: 3px 3px #8a2be2;
+      margin-bottom: 40px;
+      line-height: 1.4;
+    }
+
+    .btn-play {
+      background-color: #57c7ff;
+      color: #000;
+      border: 4px solid #fff;
+      padding: 18px 40px;
+      font-size: 18pt;
+      cursor: pointer;
+      box-shadow: 0 6px #0077b6;
+      transition: all 0.1s ease;
+      image-rendering: pixelated;
+    }
+
+    .btn-play:hover {
+      background-color: #80d8ff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px #0077b6;
+    }
+
+    .btn-play:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px #0077b6;
+    }
+
+    /* Caixa de Diálogo Aesthetic */
+    .dialog-box {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      background: rgba(20, 10, 35, 0.92);
+      border: 4px solid #00ffcc;
+      border-radius: 8px;
+      padding: 15px;
+      font-size: 10pt;
+      line-height: 1.6;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+      z-index: 10;
+    }
+
+    /* Sistema de Conquistas Pixel Popup */
+    .achievement {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2a0845;
+      border: 3px solid #ff007f;
+      color: #ffe600;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 9pt;
+      box-shadow: 0 0 15px #ff007f;
+      transition: top 0.5s ease-in-out;
+      z-index: 100;
+      text-align: center;
+      max-width: 80%;
+    }
+
+    .achievement.show {
+      top: 20px;
+    }
+
+    /* Cenário 1: Padaria */
+    #bakery-screen {
+      /* ENCAIXE A IMAGEM DA PADARIA AQUI */
+      background-image: url('padaria.jpg');
+    }
+
+    /* Cenário 2: Cozinha */
+    #kitchen-screen {
+      /* ENCAIXE A IMAGEM DA COZINHA AQUI */
+      background-image: url('cozinha.jpg');
+    }
+
+    /* Personagens */
+    .avatar {
+      position: absolute;
+      height: 140px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+      transition: left 0.1s linear, top 0.1s linear;
+    }
+
+    #coisinho {
+      /* ENCAIXE A IMAGEM DO COISINHO AQUI */
+      background-image: url('coisinho.png');
+      width: 90px;
+      bottom: 60px;
+      left: 50px;
+    }
+
+    #amiga {
+      /* ENCAIXE A SUA IMAGEM AQUI */
+      background-image: url('amiga.png');
+      width: 90px;
+      bottom: 60px;
+      right: 150px;
+      display: none;
+    }
+
+    /* Itens da Padaria */
+    .item {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: #ffe600;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16pt;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ffe600;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+
+    /* Posições dos Itens na Padaria */
+    #leite { top: 320px; left: 160px; }
+    #trigo { top: 250px; left: 450px; }
+    #ovo { top: 320px; left: 620px; }
+    #manteiga { top: 420px; left: 300px; }
+
+    /* Saída da Padaria */
+    #exit-door {
+      position: absolute;
+      right: 0;
+      top: 200px;
+      width: 40px;
+      height: 250px;
+      background: rgba(0, 255, 204, 0.3);
+      border-left: 3px dashed #00ffcc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8pt;
+      writing-mode: vertical-rl;
+      color: #00ffcc;
+    }
+
+    /* Bacia de Mistura na Cozinha */
+    #mixing-bowl {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 60px;
+      background: #e0e0e0;
+      border: 4px solid #a0a0a0;
+      border-radius: 0 0 50px 50px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20pt;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.3);
+    }
+
+    #mixing-bowl:hover {
+      background: #ffffff;
+      box-shadow: 0 0 15px #00ffcc;
+    }
+
+    /* Bolo Pronto */
+    #cake {
+      position: absolute;
+      bottom: 130px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 50pt;
+      display: none;
+      animation: pop 0.5s ease-out;
+    }
+
+    @keyframes pop {
+      0% { transform: translateX(-50%) scale(0); }
+      80% { transform: translateX(-50%) scale(1.2); }
+      100% { transform: translateX(-50%) scale(1); }
+    }
+
+    /* Confetes / Estrelas para o Final */
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: #ff007f;
+      animation: fall 3s linear infinite;
+    }
+
+    @keyframes fall {
+      0% { top: -10px; transform: rotate(0deg); }
+      100% { top: 600px; transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="game-container">
+
+    <!-- Pop-up de Conquista -->
+    <div id="achievement-popup" class="achievement">
+      🏆 CONQUISTA DESBLOQUEADA!<br>
+      <span id="achievement-title" style="color: #fff;"></span>
+    </div>
+
+    <!-- TELA 1: MENU DE INÍCIO -->
+    <div id="start-screen" class="screen active">
+      <h1>COISINHO'S<br>BIRTHDAY QUEST</h1>
+      <button class="btn-play" onclick="startGame()">PLAY</button>
+    </div>
+
+    <!-- TELA 2: PADARIA -->
+    <div id="bakery-screen" class="screen">
+      <!-- Avatar do Coisinho -->
+      <div id="coisinho" class="avatar"></div>
+
+      <!-- Itens para coletar -->
+      <div id="leite" class="item" onclick="collectItem('leite', '🥛 Leite')">🥛</div>
+      <div id="trigo" class="item" onclick="collectItem('trigo', '🌾 Trigo')">🌾</div>
+      <div id="ovo" class="item" onclick="collectItem('ovo', '🥚 Ovo')">🥚</div>
+      <div id="manteiga" class="item" onclick="collectItem('manteiga', '🧈 Manteiga')">🧈</div>
+
+      <!-- Saída -->
+      <div id="exit-door" onclick="tryExit()">SAÍDA ➔</div>
+
+      <!-- Caixa de Texto -->
+      <div class="dialog-box" id="bakery-dialog">
+        MISSION: Roube os ingredientes para o bolo (Leite, Trigo, Ovo e Manteiga) e fuja pela saída!
+      </div>
+    </div>
+
+    <!-- TELA 3: COZINHA -->
+    <div id="kitchen-screen" class="screen">
+      <!-- Personagens na cozinha -->
+      <div id="coisinho-kitchen" class="avatar" style="background-image: url('coisinho.png'); bottom: 100px; left: 220px;"></div>
+      <div id="amiga" class="avatar" style="bottom: 100px; right: 220px;"></div>
+
+      <!-- Bacia para Misturar -->
+      <div id="mixing-bowl" onclick="mixIngredients()">🥣</div>
+
+      <!-- Bolo Final -->
+      <div id="cake">🎂</div>
+
+      <!-- Caixa de Texto -->
+      <div class="dialog-box" id="kitchen-dialog">
+        Clique na bacia para misturar todos os ingredientes do bolo!
+      </div>
+    </div>
+
+  </div>
+
 }
