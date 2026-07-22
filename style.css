@@ -1,301 +1,284 @@
-/* ==========================================
-   1. CONFIGURAÇÕES GERAIS E RESETS
-   ========================================== */
+/* ===================================================
+   RESET & CONFIGURAÇÕES GERAIS
+   =================================================== */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    user-select: none;
-    font-family: 'Press Start 2P', monospace; /* Fonte estilo Pixel Art */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  font-family: 'Press Start 2P', monospace;
 }
 
 body {
-    background-color: #1a1a2e;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
+  background-color: #1a0933;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  color: #fff;
 }
 
-/* Container Principal do Jogo */
+/* ===================================================
+   CONTAINER DO JOGO (TELA PRINCIPAL)
+   =================================================== */
 #game-container {
-    width: 800px;
-    height: 500px;
-    position: relative;
-    background-color: #000;
-    border: 4px solid #fff;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-    overflow: hidden;
+  width: 800px;
+  height: 600px;
+  position: relative;
+  border: 4px solid #8a2be2;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #8a2be2, 0 0 40px #00ffcc;
+  overflow: hidden;
+  background-color: #000;
 }
 
-/* ==========================================
-   2. TELA DE START (AZUL CLARO PIXEL)
-   ========================================== */
+/* ===================================================
+   ESTRUTURA DAS TELAS
+   =================================================== */
+.screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.active {
+  display: flex;
+}
+
+/* Menu Inicial (Roxo e Verde Pixelated) */
 #start-screen {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #87CEEB; /* Azul Claro */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    border: 8px solid #4682B4;
+  background: linear-gradient(135deg, #2b0054 0%, #0d3b36 100%);
 }
 
-#start-screen h1 {
-    color: #1E3F66;
-    font-size: 24px;
-    margin-bottom: 40px;
-    text-align: center;
-    text-shadow: 3px 3px 0px #FFF;
-    line-height: 1.5;
+h1 {
+  font-size: 24pt;
+  color: #00f0ff;
+  text-shadow: 3px 3px #8a2be2;
+  margin-bottom: 40px;
+  line-height: 1.4;
 }
 
+/* Botão PLAY Aesthetic (Azul Claro) */
 .btn-play {
-    background-color: #005f73;
-    color: #FFF;
-    border: 4px solid #FFF;
-    padding: 15px 40px;
-    font-size: 20px;
-    cursor: pointer;
-    box-shadow: 4px 4px 0px #000;
-    transition: transform 0.1s;
+  background-color: #57c7ff;
+  color: #000;
+  border: 4px solid #fff;
+  padding: 18px 40px;
+  font-size: 18pt;
+  cursor: pointer;
+  box-shadow: 0 6px #0077b6;
+  transition: all 0.1s ease;
+  image-rendering: pixelated;
 }
 
 .btn-play:hover {
-    background-color: #0a9396;
-    transform: scale(1.05);
+  background-color: #80d8ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px #0077b6;
 }
 
-/* ==========================================
-   3. CENÁRIOS (PADARIA E COZINHA)
-   ========================================== */
-.scene {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: none;
+.btn-play:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px #0077b6;
 }
 
-/* Cenário 1: Padaria */
-#bakery-scene {
-    background-color: #f4a261;
-    /* Padrão Xadrez do Chão */
-    background-image: 
-        linear-gradient(45deg, #e76f51 25%, transparent 25%), 
-        linear-gradient(-45deg, #e76f51 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #e76f51 75%),
-        linear-gradient(-45deg, transparent 75%, #e76f51 75%);
-    background-size: 40px 40px;
-    background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+/* ===================================================
+   CAIXA DE DIÁLOGO E POP-UP DE CONQUISTAS
+   =================================================== */
+.dialog-box {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  background: rgba(20, 10, 35, 0.92);
+  border: 4px solid #00ffcc;
+  border-radius: 8px;
+  padding: 15px;
+  font-size: 10pt;
+  line-height: 1.6;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+  z-index: 10;
 }
 
-.counter {
-    position: absolute;
-    bottom: 0;
-    left: 200px;
-    width: 400px;
-    height: 80px;
-    background-color: #8d5b4c;
-    border: 4px solid #3d2314;
-}
-
-.exit-door {
-    position: absolute;
-    bottom: 0;
-    right: 20px;
-    width: 80px;
-    height: 140px;
-    background-color: #e63946;
-    border: 4px solid #900c3f;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 10px;
-    text-align: center;
-    cursor: pointer;
-}
-
-/* Cenário 2: Cozinha */
-#kitchen-scene {
-    background-color: #2a9d8f;
-    background-image: radial-gradient(#264653 20%, transparent 20%);
-    background-size: 30px 30px;
-}
-
-.kitchen-table {
-    position: absolute;
-    bottom: 40px;
-    left: 250px;
-    width: 300px;
-    height: 120px;
-    background-color: #e9c46a;
-    border: 4px solid #f4a261;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.bowl {
-    width: 80px;
-    height: 50px;
-    background-color: #ffffff;
-    border: 4px solid #d8d8d8;
-    border-radius: 0 0 40px 40px;
-    cursor: pointer;
-    position: relative;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
-    transition: transform 0.15s ease;
-}
-
-/* ==========================================
-   4. AVATARES (PIXEL ART)
-   ========================================== */
-.avatar {
-    width: 50px;
-    height: 70px;
-    position: absolute;
-    transition: all 0.3s ease;
-}
-
-/* Avatar do Coisinho (Moletom Verde Musgo, Cabelo Castanho Cacheado + Mecha Branca) */
-.coisinho {
-    background-color: #2d6a4f;
-    border-radius: 8px;
-    border: 3px solid #1b4332;
-}
-.coisinho::before {
-    content: '';
-    position: absolute;
-    top: -18px;
-    left: 2px;
-    width: 40px;
-    height: 22px;
-    background-color: #582f0e; /* Cabelo Castanho */
-    border-radius: 10px 10px 0 0;
-    box-shadow: inset 10px 0 0 #e9ecef; /* Mecha Branca */
-}
-.coisinho::after {
-    content: '';
-    position: absolute;
-    top: 15px;
-    left: 10px;
-    width: 24px;
-    height: 12px;
-    background-color: #ffcdb2; /* Rosto */
-    border-radius: 3px;
-}
-
-/* Seu Avatar (Cabelo Cacheado Vermelho, Pele Morena Clara) */
-.my-avatar {
-    background-color: #e63946;
-    border-radius: 8px;
-    border: 3px solid #900c3f;
-}
-.my-avatar::before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: -4px;
-    width: 52px;
-    height: 25px;
-    background-color: #d62828; /* Cabelo Vermelho */
-    border-radius: 15px 15px 0 0;
-}
-.my-avatar::after {
-    content: '';
-    position: absolute;
-    top: 15px;
-    left: 10px;
-    width: 24px;
-    height: 12px;
-    background-color: #e0a96d; /* Pele Morena Clara */
-    border-radius: 3px;
-}
-
-/* ==========================================
-   5. ITENS, CONQUISTAS E BOLO
-   ========================================== */
-.item {
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    background-color: #FFF;
-    border: 2px solid #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    cursor: pointer;
-    animation: bounce 0.6s infinite alternate;
-}
-
-@keyframes bounce {
-    from { transform: translateY(0); }
-    to { transform: translateY(-8px); }
-}
-
-/* Caixas de Texto e Diálogos */
-#msg-box {
-    position: absolute;
-    top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    background-color: rgba(0, 0, 0, 0.85);
-    color: #FFF;
-    border: 3px solid #FFF;
-    padding: 12px;
-    font-size: 11px;
-    line-height: 1.6;
-    text-align: center;
-    z-index: 50;
-}
-
-/* Pop-up Amarelo de Conquistas */
 .achievement {
-    position: absolute;
-    bottom: -80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #f1c40f;
-    color: #000;
-    border: 4px solid #000;
-    padding: 12px 20px;
-    font-size: 10px;
-    text-align: center;
-    z-index: 60;
-    transition: bottom 0.5s ease-in-out;
-    box-shadow: 0 4px 0 #b7950b;
-    max-width: 80%;
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2a0845;
+  border: 3px solid #ff007f;
+  color: #ffe600;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 9pt;
+  box-shadow: 0 0 15px #ff007f;
+  transition: top 0.5s ease-in-out;
+  z-index: 100;
+  text-align: center;
+  max-width: 85%;
+  line-height: 1.4;
 }
 
 .achievement.show {
-    bottom: 20px;
+  top: 20px;
 }
 
-/* Bolo Final */
-#cake {
-    width: 60px;
-    height: 45px;
-    background-color: #fff; /* Leite Ninho */
-    border: 3px solid #d4a373;
-    border-radius: 8px 8px 0 0;
-    position: absolute;
-    top: -50px;
-    display: none;
+/* ===================================================
+   CENÁRIOS DO JOGO
+   =================================================== */
+
+/* Padaria */
+#bakery-screen {
+  background-image: url('padaria.png.jpeg');
 }
-#cake::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 15px;
-    background-color: #fcbf49; /* Calda de Maracujá */
-    border-radius: 5px 5px 0 0;
+
+/* Cozinha */
+#kitchen-screen {
+  background-image: url('cozinha.png.jpeg');
+}
+
+/* ===================================================
+   PERSONAGENS (AVATARES)
+   =================================================== */
+.avatar {
+  position: absolute;
+  height: 140px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+  transition: left 0.1s linear, top 0.1s linear;
+}
+
+#coisinho {
+  background-image: url('Coisinho.png.png');
+  width: 90px;
+  bottom: 60px;
+  left: 50px;
+}
+
+#amiga {
+  background-image: url('ChatGPT Image 21 de jul. de 2026, 23_18_03.png');
+  width: 90px;
+  bottom: 60px;
+  right: 150px;
+  display: none;
+}
+
+/* ===================================================
+   ITENS DA PADARIA & INTERAÇÕES
+   =================================================== */
+.item {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: #ffe600;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16pt;
+  cursor: pointer;
+  box-shadow: 0 0 10px #ffe600;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-8px); }
+}
+
+#leite { top: 320px; left: 160px; }
+#trigo { top: 250px; left: 450px; }
+#ovo { top: 320px; left: 620px; }
+#manteiga { top: 420px; left: 300px; }
+
+/* Saída da Padaria */
+#exit-door {
+  position: absolute;
+  right: 0;
+  top: 200px;
+  width: 40px;
+  height: 250px;
+  background: rgba(0, 255, 204, 0.3);
+  border-left: 3px dashed #00ffcc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8pt;
+  writing-mode: vertical-rl;
+  color: #00ffcc;
+  cursor: pointer;
+}
+
+#exit-door:hover {
+  background: rgba(0, 255, 204, 0.5);
+}
+
+/* ===================================================
+   ELEMENTOS DA COZINHA E FESTA
+   =================================================== */
+#mixing-bowl {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 60px;
+  background: #e0e0e0;
+  border: 4px solid #a0a0a0;
+  border-radius: 0 0 50px 50px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20pt;
+  box-shadow: 0 8px 0 rgba(0,0,0,0.3);
+}
+
+#mixing-bowl:hover {
+  background: #ffffff;
+  box-shadow: 0 0 15px #00ffcc;
+}
+
+#cake {
+  position: absolute;
+  bottom: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 50pt;
+  display: none;
+  animation: pop 0.5s ease-out;
+}
+
+@keyframes pop {
+  0% { transform: translateX(-50%) scale(0); }
+  80% { transform: translateX(-50%) scale(1.2); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #ff007f;
+  animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+  0% { top: -10px; transform: rotate(0deg); }
+  100% { top: 600px; transform: rotate(360deg); }
 }

@@ -1,407 +1,432 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Game - Niver do Coisinho</title>
-    <!-- Fonte Pixel Art -->
-    <link href="padaria.png.jpeg" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            font-family: 'Press Start 2P', monospace;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Aniversário, Coisinho!</title>
+  <!-- Fonte Pixelated Aesthetic -->
+  <link href="padaria.png.jpeg" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      font-family: 'Press Start 2P', monospace;
+    }
 
-        body {
-            background-color: #1a1a2e;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+    body {
+      background-color: #1a0933;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      color: #fff;
+    }
 
-        /* Container do Jogo ajustado para manter a proporção das imagens */
-        #game-container {
-            width: 750px;
-            height: 750px;
-            position: relative;
-            background-color: #000;
-            border: 4px solid #fff;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
-            overflow: hidden;
-        }
+    /* Container Principal do Jogo */
+    #game-container {
+      width: 800px;
+      height: 600px;
+      position: relative;
+      border: 4px solid #8a2be2;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #8a2be2, 0 0 40px #00ffcc;
+      overflow: hidden;
+      background-color: #000;
+    }
 
-        /* Tela de Start */
-        #start-screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: #87CEEB;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            border: 8px solid #4682B4;
-        }
+    /* Tela de Início / Menu (Roxo, Verde e Azul Pixel) */
+    .screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background-size: cover;
+      background-position: center;
+    }
 
-        #start-screen h1 {
-            color: #1E3F66;
-            font-size: 22px;
-            margin-bottom: 40px;
-            text-align: center;
-            text-shadow: 3px 3px 0px #FFF;
-            line-height: 1.5;
-            padding: 0 20px;
-        }
+    .active {
+      display: flex;
+    }
 
-        .btn-play {
-            background-color: #005f73;
-            color: #FFF;
-            border: 4px solid #FFF;
-            padding: 15px 40px;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 4px 4px 0px #000;
-            transition: transform 0.1s;
-        }
+    #start-screen {
+      background: linear-gradient(135deg, #2b0054 0%, #0d3b36 100%);
+    }
 
-        .btn-play:hover {
-            background-color: #0a9396;
-            transform: scale(1.05);
-        }
+    h1 {
+      font-size: 24pt;
+      color: #00f0ff;
+      text-shadow: 3px 3px #8a2be2;
+      margin-bottom: 40px;
+      line-height: 1.4;
+    }
 
-        /* Cenários com as Imagens */
-        .scene {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: none;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
+    .btn-play {
+      background-color: #57c7ff;
+      color: #000;
+      border: 4px solid #fff;
+      padding: 18px 40px;
+      font-size: 18pt;
+      cursor: pointer;
+      box-shadow: 0 6px #0077b6;
+      transition: all 0.1s ease;
+      image-rendering: pixelated;
+    }
 
-        /* Imagem da Padaria */
-        #bakery-scene {
-            background-image: url('padaria.jpg');
-        }
+    .btn-play:hover {
+      background-color: #80d8ff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px #0077b6;
+    }
 
-        /* Imagem da Cozinha */
-        #kitchen-scene {
-            background-image: url('cozinha.jpg');
-        }
+    .btn-play:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px #0077b6;
+    }
 
-        /* Zona invisível da porta de saída */
-        .exit-door {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 100px;
-            height: 120px;
-            background-color: rgba(230, 57, 70, 0.8);
-            border: 3px dashed #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 10px;
-            text-align: center;
-            cursor: pointer;
-            z-index: 10;
-        }
+    /* Caixa de Diálogo Aesthetic */
+    .dialog-box {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      background: rgba(20, 10, 35, 0.92);
+      border: 4px solid #00ffcc;
+      border-radius: 8px;
+      padding: 15px;
+      font-size: 10pt;
+      line-height: 1.6;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+      z-index: 10;
+    }
 
-        /* Bacia e Mesa na Cozinha */
-        .kitchen-table-area {
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    /* Sistema de Conquistas Pixel Popup */
+    .achievement {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2a0845;
+      border: 3px solid #ff007f;
+      color: #ffe600;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 9pt;
+      box-shadow: 0 0 15px #ff007f;
+      transition: top 0.5s ease-in-out;
+      z-index: 100;
+      text-align: center;
+      max-width: 80%;
+    }
 
-        .bowl {
-            width: 90px;
-            height: 55px;
-            background-color: #ffffff;
-            border: 4px solid #d8d8d8;
-            border-radius: 0 0 45px 45px;
-            cursor: pointer;
-            position: relative;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.4);
-            z-index: 15;
-            transition: transform 0.15s ease;
-        }
+    .achievement.show {
+      top: 20px;
+    }
 
-        /* Avatares */
-        .avatar {
-            position: absolute;
-            transition: all 0.3s ease;
-            z-index: 20;
-        }
+    /* Cenário 1: Padaria */
+    #bakery-screen {
+      /* ENCAIXE A IMAGEM DA PADARIA AQUI */
+      background-image: url('padaria.jpg');
+    }
 
-        /* Avatar em Imagem Real do Coisinho */
-        .coisinho-img {
-            width: 110px;
-            height: auto;
-        }
+    /* Cenário 2: Cozinha */
+    #kitchen-screen {
+      /* ENCAIXE A IMAGEM DA COZINHA AQUI */
+      background-image: url('cozinha.jpg');
+    }
 
-        /* Seu Avatar (Estilo Pixel em CSS) */
-        .my-avatar {
-            width: 60px;
-            height: 90px;
-            background-color: #e63946;
-            border-radius: 8px;
-            border: 3px solid #900c3f;
-        }
-        .my-avatar::before {
-            content: '';
-            position: absolute;
-            top: -24px;
-            left: -4px;
-            width: 62px;
-            height: 30px;
-            background-color: #d62828;
-            border-radius: 18px 18px 0 0;
-        }
-        .my-avatar::after {
-            content: '';
-            position: absolute;
-            top: 18px;
-            left: 12px;
-            width: 30px;
-            height: 15px;
-            background-color: #e0a96d;
-            border-radius: 3px;
-        }
+    /* Personagens */
+    .avatar {
+      position: absolute;
+      height: 140px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+      transition: left 0.1s linear, top 0.1s linear;
+    }
 
-        /* Itens para Coletar na Padaria */
-        .item {
-            width: 40px;
-            height: 40px;
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 3px solid #000;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 15;
-            animation: bounce 0.6s infinite alternate;
-        }
+    #coisinho {
+      /* ENCAIXE A IMAGEM DO COISINHO AQUI */
+      background-image: url('coisinho.png');
+      width: 90px;
+      bottom: 60px;
+      left: 50px;
+    }
 
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-8px); }
-        }
+    #amiga {
+      /* ENCAIXE A SUA IMAGEM AQUI */
+      background-image: url('amiga.png');
+      width: 90px;
+      bottom: 60px;
+      right: 150px;
+      display: none;
+    }
 
-        /* Caixas de Texto e Popups */
-        #msg-box {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            background-color: rgba(0, 0, 0, 0.88);
-            color: #FFF;
-            border: 3px solid #FFF;
-            padding: 14px;
-            font-size: 11px;
-            line-height: 1.6;
-            text-align: center;
-            z-index: 50;
-        }
+    /* Itens da Padaria */
+    .item {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: #ffe600;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16pt;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ffe600;
+      animation: bounce 1s infinite alternate;
+    }
 
-        .achievement {
-            position: absolute;
-            bottom: -90px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #f1c40f;
-            color: #000;
-            border: 4px solid #000;
-            padding: 14px 20px;
-            font-size: 10px;
-            text-align: center;
-            z-index: 60;
-            transition: bottom 0.5s ease-in-out;
-            box-shadow: 0 4px 0 #b7950b;
-            max-width: 85%;
-        }
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
 
-        .achievement.show {
-            bottom: 25px;
-        }
+    /* Posições dos Itens na Padaria */
+    #leite { top: 320px; left: 160px; }
+    #trigo { top: 250px; left: 450px; }
+    #ovo { top: 320px; left: 620px; }
+    #manteiga { top: 420px; left: 300px; }
 
-        /* Bolo de Aniversário */
-        #cake {
-            width: 70px;
-            height: 50px;
-            background-color: #fff;
-            border: 3px solid #d4a373;
-            border-radius: 8px 8px 0 0;
-            position: absolute;
-            top: -55px;
-            left: 6px;
-            display: none;
-        }
-        #cake::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            width: 100%;
-            height: 18px;
-            background-color: #fcbf49;
-            border-radius: 5px 5px 0 0;
-        }
-    </style>
+    /* Saída da Padaria */
+    #exit-door {
+      position: absolute;
+      right: 0;
+      top: 200px;
+      width: 40px;
+      height: 250px;
+      background: rgba(0, 255, 204, 0.3);
+      border-left: 3px dashed #00ffcc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8pt;
+      writing-mode: vertical-rl;
+      color: #00ffcc;
+    }
+
+    /* Bacia de Mistura na Cozinha */
+    #mixing-bowl {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 60px;
+      background: #e0e0e0;
+      border: 4px solid #a0a0a0;
+      border-radius: 0 0 50px 50px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20pt;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.3);
+    }
+
+    #mixing-bowl:hover {
+      background: #ffffff;
+      box-shadow: 0 0 15px #00ffcc;
+    }
+
+    /* Bolo Pronto */
+    #cake {
+      position: absolute;
+      bottom: 130px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 50pt;
+      display: none;
+      animation: pop 0.5s ease-out;
+    }
+
+    @keyframes pop {
+      0% { transform: translateX(-50%) scale(0); }
+      80% { transform: translateX(-50%) scale(1.2); }
+      100% { transform: translateX(-50%) scale(1); }
+    }
+
+    /* Confetes / Estrelas para o Final */
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: #ff007f;
+      animation: fall 3s linear infinite;
+    }
+
+    @keyframes fall {
+      0% { top: -10px; transform: rotate(0deg); }
+      100% { top: 600px; transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <!-- TELA DE START -->
-        <div id="start-screen">
-            <h1>O ANIVERSÁRIO DO COISINHO</h1>
-            <button class="btn-play" onclick="startGame()">PLAY</button>
-        </div>
+  <div id="game-container">
 
-        <!-- CAIXA DE MENSAGENS -->
-        <div id="msg-box">Carregando missão...</div>
-
-        <!-- POPUP DE CONQUISTAS -->
-        <div id="achievement-popup" class="achievement">
-            🏆 <b>CONQUISTA DESBLOQUEADA:</b><br><span id="achievement-text"></span>
-        </div>
-
-        <!-- CENÁRIO 1: PADARIA -->
-        <div id="bakery-scene" class="scene">
-            <div class="exit-door" id="door" onclick="tryExit()">SAÍDA</div>
-            
-            <!-- Avatar do Coisinho (Imagem Real) -->
-            <img src="coisinho.png" id="coisinho-bakery" class="avatar coisinho-img" style="bottom: 80px; left: 80px;" alt="Coisinho">
-
-            <!-- Ingredientes espalhados pelas prateleiras/mesas -->
-            <div class="item" id="item-leite" style="top: 280px; left: 240px;" onclick="collectItem('leite', '🥛 Leite')">🥛</div>
-            <div class="item" id="item-trigo" style="top: 220px; left: 520px;" onclick="collectItem('trigo', '🌾 Trigo')">🌾</div>
-            <div class="item" id="item-ovo" style="top: 480px; left: 160px;" onclick="collectItem('ovo', '🥚 Ovo')">🥚</div>
-            <div class="item" id="item-manteiga" style="top: 460px; left: 580px;" onclick="collectItem('manteiga', '🧈 Manteiga')">🧈</div>
-        </div>
-
-        <!-- CENÁRIO 2: COZINHA -->
-        <div id="kitchen-scene" class="scene">
-            <!-- Avatares na Cozinha -->
-            <img src="coisinho.png" id="coisinho-kitchen" class="avatar coisinho-img" style="bottom: 120px; left: 120px;" alt="Coisinho">
-            <div id="my-avatar" class="avatar my-avatar" style="bottom: 120px; right: 120px; display: none;"></div>
-
-            <div class="kitchen-table-area">
-                <div class="bowl" id="bowl" onclick="mixCake()">
-                    <div id="cake"></div>
-                </div>
-            </div>
-        </div>
+    <!-- Pop-up de Conquista -->
+    <div id="achievement-popup" class="achievement">
+      🏆 CONQUISTA DESBLOQUEADA!<br>
+      <span id="achievement-title" style="color: #fff;"></span>
     </div>
 
-    <script>
-        let itemsCollected = [];
-        const totalItems = ['leite', 'trigo', 'ovo', 'manteiga'];
-        let cakeMade = false;
+    <!-- TELA 1: MENU DE INÍCIO -->
+    <div id="start-screen" class="screen active">
+      <h1>COISINHO'S<br>BIRTHDAY QUEST</h1>
+      <button class="btn-play" onclick="startGame()">PLAY</button>
+    </div>
 
-        const msgBox = document.getElementById('msg-box');
-        const achievementPopup = document.getElementById('achievement-popup');
-        const achievementText = document.getElementById('achievement-text');
+    <!-- TELA 2: PADARIA -->
+    <div id="bakery-screen" class="screen">
+      <!-- Avatar do Coisinho -->
+      <div id="coisinho" class="avatar"></div>
 
-        function startGame() {
-            document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('bakery-scene').style.display = 'block';
-            updateMsg("Sua missão: Clique e roube os ingredientes para o bolo (Leite, Trigo, Ovo e Manteiga) e fuja pela SAÍDA!");
+      <!-- Itens para coletar -->
+      <div id="leite" class="item" onclick="collectItem('leite', '🥛 Leite')">🥛</div>
+      <div id="trigo" class="item" onclick="collectItem('trigo', '🌾 Trigo')">🌾</div>
+      <div id="ovo" class="item" onclick="collectItem('ovo', '🥚 Ovo')">🥚</div>
+      <div id="manteiga" class="item" onclick="collectItem('manteiga', '🧈 Manteiga')">🧈</div>
+
+      <!-- Saída -->
+      <div id="exit-door" onclick="tryExit()">SAÍDA ➔</div>
+
+      <!-- Caixa de Texto -->
+      <div class="dialog-box" id="bakery-dialog">
+        MISSION: Roube os ingredientes para o bolo (Leite, Trigo, Ovo e Manteiga) e fuja pela saída!
+      </div>
+    </div>
+
+    <!-- TELA 3: COZINHA -->
+    <div id="kitchen-screen" class="screen">
+      <!-- Personagens na cozinha -->
+      <div id="coisinho-kitchen" class="avatar" style="background-image: url('coisinho.png'); bottom: 100px; left: 220px;"></div>
+      <div id="amiga" class="avatar" style="bottom: 100px; right: 220px;"></div>
+
+      <!-- Bacia para Misturar -->
+      <div id="mixing-bowl" onclick="mixIngredients()">🥣</div>
+
+      <!-- Bolo Final -->
+      <div id="cake">🎂</div>
+
+      <!-- Caixa de Texto -->
+      <div class="dialog-box" id="kitchen-dialog">
+        Clique na bacia para misturar todos os ingredientes do bolo!
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Controle do Estado do Jogo
+    let itemsCollected = {
+      leite: false,
+      trigo: false,
+      ovo: false,
+      manteiga: false
+    };
+
+    let totalItems = 0;
+
+    // Função para Iniciar o Jogo
+    function startGame() {
+      switchScreen('start-screen', 'bakery-screen');
+    }
+
+    // Alternar entre telas
+    function switchScreen(fromId, toId) {
+      document.getElementById(fromId).classList.remove('active');
+      document.getElementById(toId).classList.add('active');
+    }
+
+    // Coletar Itens na Padaria
+    function collectItem(id, name) {
+      if (!itemsCollected[id]) {
+        itemsCollected[id] = true;
+        totalItems++;
+        document.getElementById(id).style.display = 'none';
+        
+        const dialog = document.getElementById('bakery-dialog');
+        dialog.innerText = `Você conseguiu: ${name}! (${totalItems}/4)`;
+        
+        if (totalItems === 4) {
+          dialog.innerText = "Você pegou todos os ingredientes! Agora vá para a SAÍDA!";
         }
+      }
+    }
 
-        function updateMsg(text) {
-            msgBox.innerHTML = text;
-        }
+    // Tentar sair da Padaria
+    function tryExit() {
+      if (totalItems === 4) {
+        showAchievement("Assaltante de Padaria 🥖");
+        setTimeout(() => {
+          switchScreen('bakery-screen', 'kitchen-screen');
+        }, 2500);
+      } else {
+        const dialog = document.getElementById('bakery-dialog');
+        dialog.innerText = "Você ainda não pegou todos os ingredientes! Falta coisa...";
+      }
+    }
 
-        function showAchievement(text, callback) {
-            achievementText.innerText = text;
-            achievementPopup.classList.add('show');
-            setTimeout(() => {
-                achievementPopup.classList.remove('show');
-                if(callback) callback();
-            }, 4000);
-        }
+    // Misturar ingredientes na Cozinha
+    function mixIngredients() {
+      document.getElementById('mixing-bowl').style.display = 'none';
+      document.getElementById('cake').style.display = 'block';
 
-        function collectItem(id, name) {
-            if (!itemsCollected.includes(id)) {
-                itemsCollected.push(id);
-                document.getElementById('item-' + id).style.display = 'none';
-                
-                const itemElem = document.getElementById('item-' + id);
-                const coisinho = document.getElementById('coisinho-bakery');
-                coisinho.style.left = (parseInt(itemElem.style.left) - 30) + 'px';
+      // Mostrar conquista do bolo
+      showAchievement("Bolo de leite ninho com maracujá... embora o de chocolate com maracujá seja melhor 🍰");
 
-                if (itemsCollected.length === totalItems.length) {
-                    updateMsg("Você pegou todos os ingredientes! Agora fuja pela SAÍDA!");
-                } else {
-                    updateMsg(`Você pegou o ${name}! Faltam ${totalItems.length - itemsCollected.length} ingrediente(s).`);
-                }
-            }
-        }
+      // Transição final: Aparecer amiga e cantar parabéns
+      setTimeout(() => {
+        document.getElementById('amiga').style.display = 'block';
+        document.getElementById('kitchen-dialog').innerText = "🎉 FELIZ ANIVERSÁRIO COISINHO! 🎉";
+        createConfetti();
+      }, 3000);
+    }
 
-        function tryExit() {
-            if (itemsCollected.length < totalItems.length) {
-                updateMsg("Você ainda não pegou todos os ingredientes! Não dá pra fazer o bolo assim!");
-            } else {
-                document.getElementById('coisinho-bakery').style.left = '580px';
-                
-                setTimeout(() => {
-                    showAchievement("assaltante de padaria", () => {
-                        goToKitchen();
-                    });
-                }, 500);
-            }
-        }
+    // Exibir Sistema de Conquistas
+    function showAchievement(text) {
+      const popup = document.getElementById('achievement-popup');
+      const title = document.getElementById('achievement-title');
+      title.innerText = text;
+      
+      popup.classList.add('show');
+      setTimeout(() => {
+        popup.classList.remove('show');
+      }, 3500);
+    }
 
-        function goToKitchen() {
-            document.getElementById('bakery-scene').style.display = 'none';
-            document.getElementById('kitchen-scene').style.display = 'block';
-            updateMsg("Clique na bacia para misturar todos os ingredientes!");
-        }
-
-        function mixCake() {
-            if (cakeMade) return;
-            cakeMade = true;
-
-            const bowl = document.getElementById('bowl');
-            bowl.style.transform = 'rotate(10deg)';
-            
-            setTimeout(() => bowl.style.transform = 'rotate(-10deg)', 150);
-            setTimeout(() => bowl.style.transform = 'rotate(0deg)', 300);
-
-            setTimeout(() => {
-                document.getElementById('cake').style.display = 'block';
-                
-                showAchievement("Bolo de leite ninho com maracuja...embora o de chocolate com maracuja seja melhor", () => {
-                    finalBirthdayScene();
-                });
-            }, 600);
-        }
-
-        function finalBirthdayScene() {
-            const myAvatar = document.getElementById('my-avatar');
-            myAvatar.style.display = 'block';
-            
-            document.getElementById('coisinho-kitchen').style.left = '220px';
-            myAvatar.style.right = '220px';
-
-            updateMsg("🎉 🎶 Parabéns pra você, nesta data querida... 🎶 🎉<br><br><b>feliz aniversario Coisinho</b> ❤️");
-        }
-    </script>
+    // Gerador de Confetes
+    function createConfetti() {
+      const colors = ['#00ffcc', '#ff007f', '#ffe600', '#8a2be2', '#57c7ff'];
+      const container = document.getElementById('game-container');
+      
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(confetti);
+      }
+    }
+  </script>
+</body>
+</html>
+<link rel="stylesheet" href="style.css">
+<script src="script.js"></script>
 </body>
 </html>
