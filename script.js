@@ -1,6 +1,6 @@
-// ===================================================
-// ESTADO E VARIÁVEIS DO JOGO
-// ===================================================
+/* ===================================================
+   ESTADO E VARIÁVEIS DO JOGO
+   =================================================== */
 let itemsCollected = {
   leite: false,
   trigo: false,
@@ -10,73 +10,73 @@ let itemsCollected = {
 
 let totalItems = 0;
 
-// ===================================================
-// NAVEGAÇÃO E FLUXO DO JOGO
-// ===================================================
+/* ===================================================
+   NAVEGAÇÃO E FLUXO DAS TELAS
+   =================================================== */
 
-// Inicia o jogo ao clicar em PLAY
+// Inicia o jogo ao clicar no botão PLAY
 function startGame() {
   switchScreen('start-screen', 'bakery-screen');
 }
 
-// Função genérica para trocar de tela
+// Alterna a exibição das telas do jogo
 function switchScreen(fromId, toId) {
   document.getElementById(fromId).classList.remove('active');
   document.getElementById(toId).classList.add('active');
 }
 
-// ===================================================
-// FASE 1: PADARIA
-// ===================================================
+/* ===================================================
+   FASE 1: PADARIA (ROUBO DOS INGREDIENTES)
+   =================================================== */
 
-// Coletar itens na padaria
+// Coleta os itens ao clicar neles
 function collectItem(id, name) {
   if (!itemsCollected[id]) {
     itemsCollected[id] = true;
     totalItems++;
     
-    // Esconde o item coletado da tela
+    // Esconde o item coletado da padaria
     document.getElementById(id).style.display = 'none';
     
     const dialog = document.getElementById('bakery-dialog');
     dialog.innerText = `Você pegou: ${name}! (${totalItems}/4)`;
     
     if (totalItems === 4) {
-      dialog.innerText = "Você pegou todos os ingredientes! Agora vá até a SAÍDA!";
+      dialog.innerText = "Você pegou todos os ingredientes! Agora vá para a SAÍDA!";
     }
   }
 }
 
-// Tentar sair da padaria
+// Valida se o Coisinho pode sair da padaria
 function tryExit() {
   if (totalItems === 4) {
-    // Exibe conquista do assalto
-    showAchievement("Assaltante de padaria 🥖");
+    // Dispara a conquista exata solicitada
+    showAchievement("assaltante de padaria 🥖");
     
-    // Aguarda a animação da conquista e vai para a cozinha
+    // Transiciona para a cozinha após exibir a conquista
     setTimeout(() => {
       switchScreen('bakery-screen', 'kitchen-screen');
     }, 2500);
   } else {
     const dialog = document.getElementById('bakery-dialog');
-    dialog.innerText = "Você ainda não pegou todos os ingredientes! A missão ainda não terminou...";
+    dialog.innerText = "Você ainda não pegou todos os ingredientes! A missão continua...";
   }
 }
 
-// ===================================================
-// FASE 2: COZINHA & FESTA
-// ===================================================
+/* ===================================================
+   FASE 2: COZINHA E PARABÉNS
+   =================================================== */
 
-// Misturar os ingredientes na bacia
+// Mistura os ingredientes na bacia e faz o bolo aparecer
 function mixIngredients() {
-  // Oculta a bacia e revela o bolo
+  // Esconde a bacia e mostra o bolo pronto
   document.getElementById('mixing-bowl').style.display = 'none';
   document.getElementById('cake').style.display = 'block';
 
-  // Dispara a conquista do bolo com o texto exato
+  // Dispara a conquista do bolo com a frase personalizada
   showAchievement("Bolo de leite ninho com maracuja...embora o de chocolate com maracuja seja melhor 🍰");
 
-  // Aparece seu avatar, canta parabéns e solta os confetes
+  // Aparece o seu avatar, toca o parabéns e solta confetes
   setTimeout(() => {
     document.getElementById('amiga').style.display = 'block';
     document.getElementById('kitchen-dialog').innerText = "🎉 feliz aniversario Coisinho 🎉";
@@ -84,11 +84,11 @@ function mixIngredients() {
   }, 3500);
 }
 
-// ===================================================
-// SISTEMA DE CONQUISTAS E EFEITOS
-// ===================================================
+/* ===================================================
+   SISTEMA DE POP-UP DE CONQUISTAS E CONFETES
+   =================================================== */
 
-// Pop-up de conquista
+// Exibe o banner de conquista no topo da tela
 function showAchievement(text) {
   const popup = document.getElementById('achievement-popup');
   const title = document.getElementById('achievement-title');
@@ -101,7 +101,7 @@ function showAchievement(text) {
   }, 3500);
 }
 
-// Chuva de confetes no final
+// Gera a chuva de confetes pixelados no final
 function createConfetti() {
   const colors = ['#00ffcc', '#ff007f', '#ffe600', '#8a2be2', '#57c7ff'];
   const container = document.getElementById('game-container');
